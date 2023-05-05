@@ -1,0 +1,89 @@
+{
+	"name": "ZomatoDataFlow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ZomatoBlob",
+						"type": "DatasetReference"
+					},
+					"name": "ZomatoData",
+					"description": "ZomatoData"
+				},
+				{
+					"dataset": {
+						"referenceName": "CountryCodeBlob",
+						"type": "DatasetReference"
+					},
+					"name": "CountryCodeData"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "SQLZomatoTable",
+						"type": "DatasetReference"
+					},
+					"name": "ZomatoTable"
+				}
+			],
+			"transformations": [
+				{
+					"name": "join1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          {Restaurant ID} as string,",
+				"          {Restaurant Name} as string,",
+				"          cc as string,",
+				"          City as string,",
+				"          Address as string,",
+				"          Locality as string,",
+				"          {Locality Verbose} as string,",
+				"          Longitude as string,",
+				"          Latitude as string,",
+				"          Cuisines as string,",
+				"          {Average Cost for two} as string,",
+				"          Currency as string,",
+				"          {Has Table booking} as string,",
+				"          {Has Online delivery} as string,",
+				"          {Is delivering now} as string,",
+				"          {Switch to order menu} as string,",
+				"          {Price range} as string,",
+				"          {Aggregate rating} as string,",
+				"          {Rating color} as string,",
+				"          {Rating text} as string,",
+				"          Votes as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> ZomatoData",
+				"source(output(",
+				"          cc as string,",
+				"          Country as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> CountryCodeData",
+				"ZomatoData, CountryCodeData join(ZomatoData@cc == CountryCodeData@cc,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"join1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> ZomatoTable"
+			]
+		}
+	}
+}

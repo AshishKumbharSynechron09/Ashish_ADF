@@ -1,0 +1,9 @@
+{
+	"name": "ashishkumbhar-synechron-adf",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "8366e679-f0aa-436d-975c-761dccd82e1b",
+		"tenantId": "e50ebc84-76f2-4636-b550-c3f7abc924af"
+	}
+}

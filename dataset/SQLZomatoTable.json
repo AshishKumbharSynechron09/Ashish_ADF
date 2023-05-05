@@ -1,0 +1,17 @@
+{
+	"name": "SQLZomatoTable",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LinkedService_AzureSQLServer",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "ZomatoData"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
